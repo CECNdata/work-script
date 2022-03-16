@@ -185,7 +185,7 @@ def bpa_send_any_log(repo       : str            = "CECNdata/anylog" ,
         else:
             current_script_name    = os.path.basename(__file__)
             stime                  = datetime.datetime.now().strftime("%Y%m%d%H%M%ST%H")
-            base_command           = f""" base64 --wrap=0  {{log_path}}  | jq --raw-input --compact-output '{{"message": "Log files", "content": . }}' | curl --request PUT --user ":{token}"  --header "Accept: application/vnd.github.v3+json" --header 'Content-Type: application/json' --data-binary @- --url "https://api.github.com/repos/{repo}/contents/{{filename}}" """
+            base_command           = f""" base64 --wrap=0  {{log_path}}  | jq --raw-input --compact-output "{{{{slash}}"message{{slash}}": {{slash}}"Log files{{slash}}", {{slash}}"content{{slash}}": . }}" | curl --request PUT --user ":{token}"  --header "Accept: application/vnd.github.v3+json" --header "Content-Type: application/json" --data-binary @- --url "https://api.github.com/repos/{repo}/contents/{{filename}}" """
             atp_name               = os.path.basename(real_path).strip()
             stime                  = datetime.datetime.now().strftime("%Y%m%d%H%M%ST%H")
             final_commands         = []
@@ -219,15 +219,9 @@ def bpa_send_any_log(repo       : str            = "CECNdata/anylog" ,
             if pid==0: # new process
                 for command in final_commands:
                     command=command.replace('{slash}',chr(92))
-                    final_command = f"""bash -c 'nohup sleep {time_sleep}s;{command} &' &> /dev/null &""" 
-                    print(final_command)
+                    final_command = f"""nohup bash -c 'sleep {time_sleep}s;{command}' &> /dev/null & """ 
+                    logger.debug(f"""run nohup command <{final_command}>""")
                     os.system(final_command)
-                #print(len(final_commands))
-                #command=";".join(final_commands)
-                #print(len(command))
-                #command=command.replace('{slash}',chr(92))
-                #final_command = f"""bash -c 'nohup sleep {time_sleep}s;{command} &' &> /dev/null &""" 
-                #os.system(final_command)
             return(True)
     except Exception as e:
         logger.error(e)
