@@ -215,7 +215,7 @@ def bpa_send_any_log(repo       : str            = "CECNdata/anylog" ,
                     filename     = f"{atp_name}_{head_filename}_{os.path.basename(log)}_{stime}.log"
                     print(filename)
                     print(base_command)
-                    final_command.append(base_command.format(filename=filename,bs64_content=bs64_content))
+                    final_command.append(base_command.replace("{filename}",filename).replace("{bs64_content}",bs64_content))
                     print(len(final_command))
                 else:
                     logger.warning(f"logfile <{log}> not exist")
