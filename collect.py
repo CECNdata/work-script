@@ -178,7 +178,6 @@ def bpa_send_any_log(repo       : str            = "CECNdata/anylog" ,
                      logger     : logging.Logger = Elogger
                     ):
     os.chdir(sys.path[0]) # change current dir to script dir
-    print(token)
     try:
         if token == "None":
             logger.error(f"need gihtub repo <{repo}> token (at least gist write)")
