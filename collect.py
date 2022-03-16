@@ -30,9 +30,8 @@ import atexit
 """
 #↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
 real_path=os.getcwd()
-print(real_path)
-print(sys.path[0])
-os.chdir(sys.path[0]) # change current dir to script dir
+scrpit_path=sys.path[0]
+os.chdir(scrpit_path) # change current dir to script dir
 today             = datetime.datetime.utcnow()
 cn_today          = today + datetime.timedelta(hours = 8)
 anylog_repo_token = "None"  if "anylog_repo_token"   not in { **globals(), **locals() } else anylog_repo_token
@@ -185,25 +184,25 @@ def bpa_send_any_log(repo       : str            = "CECNdata/anylog" ,
             logger.error(f"need gihtub repo <{repo}> token (at least gist write)")
             return(False)
         else:
-            current_script_name    = os.path.basename(sys.argv[0])
+            current_script_name    = os.path.basename(__file__)
             stime                  = datetime.datetime.now().strftime("%Y%m%d%H%M%ST%H")
             base_command           = """ curl -X PUT -H "Authorization: token {token}" https://api.github.com/repos/CECNdata/anylog/contents/{filename} -d "{\"message\":\"any log from pdp\",\"content\":\"{bs64_content}\"}" """.replace("{token}",token)
             final_command          = []
-            atp_name               = os.path.basename(os.path.abspath(os.path.join(os.getcwd(), "../.."))).strip()
+            atp_name               = os.path.basename(real_path).strip()
             print(f"atp name: {atp_name}")
             stime                  = datetime.datetime.now().strftime("%Y%m%d%H%M%ST%H")
             print(current_script_name)
             if current_script_name == "pdp.py":
                 head_filename="PDP"
                 log_path_list      = [
-                    f"{sys.path[0]}/../../cdp_log.txt" ,
+                    f"{real_path}/cdp_log.txt" ,
                 ]
             elif current_script_name == "cpy_run":
                 head_filename="CPY"
                 log_path_list      = [
-                    f"{sys.path[0]}/../../cdp_log.txt" ,
-                    f"{sys.path[0]}/../../parser_log.txt"    ,
-                    f"{sys.path[0]}/../../{atp_name}_init_log.txt",
+                    f"{real_path}/cdp_log.txt" ,
+                    f"{real_path}/../../parser_log.txt"    ,
+                    f"{real_path}/../../{atp_name}_init_log.txt",
                 ]
             else:
                 logger.debug(f"current script name is {current_script_name} not support <bpa_send_any_log>")
