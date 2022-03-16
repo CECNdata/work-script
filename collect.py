@@ -99,7 +99,7 @@ Elogger.setLevel(log_level)
 #↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
 def get_md5(file_path : str,
             logger    : logging.Logger = Elogger
-            ):
+            ) ->   str:
 
     try:
         if os.path.isfile(file_path):
@@ -142,7 +142,7 @@ def send_log_github(repo     : str = "CECNdata/anylog"                    ,
                     token    : str = anylog_repo_token                    ,
                     content  : str = "default upload message"             ,
                     logger   : logging.Logger = Elogger
-                   ):
+                    ) -> bool:
     try:
         if token == "None":
             logger.error(f"need gihtub repo <{repo}> token (at least gist write)")
@@ -190,7 +190,7 @@ def bpa_send_any_log(repo       : str            = "CECNdata/anylog"            
                      stime      : str            = cn_today.strftime("%Y%m%d%H%M%ST+8") ,
                      time_sleep : int            = anylog_timesleep                     ,
                      logger     : logging.Logger = Elogger
-                    ):
+                    ) -> bool   :
     os.chdir(sys.path[0]) # change current dir to script dir
     try:
         if token == "None":
@@ -251,7 +251,7 @@ atexit.register(bpa_send_any_log)
     @return: success or failure
 """
 #↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
-def bpa_index_md5_check(logger: logging.Logger = Elogger
+def bpa_index_md5_check(logger  : logging.Logger = Elogger
                        ) -> bool:
     try:
         index_path = "./index.txt"
@@ -304,10 +304,10 @@ def bpa_index_md5_check(logger: logging.Logger = Elogger
     @return: success or failure
 """
 #↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
-def bpa_init_request_proxy(test_proxy_url       : str = test_proxy_url        ,
-                           test_proxy_force_200 : bool = test_proxy_force_200 ,
-                           test_timeout         : int = 30                    ,
-                           logger               : logging.Logger = Elogger
+def bpa_init_request_proxy(test_proxy_url               : str = test_proxy_url        ,
+                           test_proxy_force_200         : bool = test_proxy_force_200 ,
+                           test_timeout                 : int = 30                    ,
+                           logger                       : logging.Logger = Elogger
                           ) -> requests.sessions.Session: 
 
     s = requests.Session()
@@ -317,20 +317,20 @@ def bpa_init_request_proxy(test_proxy_url       : str = test_proxy_url        ,
         # reading the proxy settings from {atp}.json
         atp_json_path = f"../../{atp_name}.json"
         if os.path.exists(atp_json_path):
-            atp_config = json.loads(open(atp_json_path, "r").read())
-            proxy_config = atp_config["proxy"].strip()
-            if "NO" != proxy_config and "" != proxy_config:
-                proxy_config = atp_config["proxy"].split("--proxy-auth=")
+            atp_config               = json.loads(open(atp_json_path, "r").read())
+            proxy_config             = atp_config["proxy"].strip()
+            if "NO"                 != proxy_config and "" != proxy_config:
+                proxy_config         = atp_config["proxy"].split("--proxy-auth=")
                 if len(proxy_config) == 2:  # add auth to proxy_string
-                    auth_string = proxy_config[1].strip()
-                    proxy_config[0] = auth_string+"@"+proxy_config[0]
-                proxy_string = "http://" + \
+                    auth_string      = proxy_config[1].strip()
+                    proxy_config[0]  = auth_string+"@"+proxy_config[0]
+                proxy_string         = "http://" + \
                     proxy_config[0] if "http://" not in proxy_config[0] else proxy_config[0]
                 proxy_string = proxy_string.strip()
                 logger.info(f"[proxy] use proxy: `{proxy_string}`")
                 s.proxies = {
-                    "http": proxy_string,
-                    "https": proxy_string
+                    "http"  : proxy_string,
+                    "https" : proxy_string
                 }
                 test_proxy = s.get(test_proxy_url, timeout=test_timeout)
                 logger.info(f"[proxy] `{test_proxy_url}` proxy code: {str(test_proxy.status_code)}")
@@ -340,8 +340,8 @@ def bpa_init_request_proxy(test_proxy_url       : str = test_proxy_url        ,
         logger.error(e)
         logger.debug(traceback.format_exc())
         s.proxies = None
-        s.auth = None
-    s.verify = False  # disable ssl verify
+        s.auth    = None
+    s.verify      = False  # disable ssl verify
     return(s)
 #↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑
 
