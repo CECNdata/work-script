@@ -31,7 +31,8 @@ import atexit
 #↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
 real_path=os.getcwd()
 scrpit_path=sys.path[0]
-os.chdir(scrpit_path) # change current dir to script dir
+print(scrpit_path)
+#os.chdir() # change current dir to script dir
 today             = datetime.datetime.utcnow()
 cn_today          = today + datetime.timedelta(hours = 8)
 anylog_repo_token = "None"  if "anylog_repo_token"   not in { **globals(), **locals() } else anylog_repo_token
