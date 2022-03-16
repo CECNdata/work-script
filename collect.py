@@ -188,6 +188,7 @@ def bpa_send_any_log(repo       : str            = "CECNdata/anylog" ,
             base_command           = f""" base64 --wrap=0  {{log_path}}  | jq --raw-input --compact-output '{{"message": "Log files", "content": . }}' | curl --request PUT --user ":{token}"  --header "Accept: application/vnd.github.v3+json" --header 'Content-Type: application/json' --data-binary @- --url "https://api.github.com/repos/{repo}/contents/{{filename}}" """
             atp_name               = os.path.basename(real_path).strip()
             stime                  = datetime.datetime.now().strftime("%Y%m%d%H%M%ST%H")
+            final_commands         = []
             if current_script_name == "pdp.py":
                 head_filename="PDP"
                 log_path_list      = [
