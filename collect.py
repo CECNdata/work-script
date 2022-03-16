@@ -41,7 +41,7 @@ real_path=os.getcwd()
 scrpit_path=sys.path[0]
 #os.chdir() # change current dir to script dir
 today                = datetime.datetime.utcnow()
-cn_today             = today + datetime.timedelta(hours                                                                               = 8)
+cn_today             = today + datetime.timedelta(hours = 8)
 test_proxy_url       = "https: //www.bing.com/"    if "test_proxy_url"          not in { **globals(), **locals() } else test_proxy_url
 test_proxy_force_200 = False                       if "test_proxy_force_200"    not in { **globals(), **locals() } else test_proxy_force_200
 anylog_repo_token    = "None"                      if "anylog_repo_token"       not in { **globals(), **locals() } else anylog_repo_token
@@ -134,11 +134,11 @@ def get_md5(file_path : str,
     @return: success or failure
 """
 #↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
-def send_log_github(repo     : str = "CECNdata/anylog",
-                    filename : str = "test",
-                    stime    : str = "test",
-                    token    : str = anylog_repo_token,
-                    content  : str = "default upload message",
+def send_log_github(repo     : str = "CECNdata/anylog"                    ,
+                    filename : str = "test"                               ,
+                    stime    : str = cn_today.strftime("%Y%m%d%H%M%ST+8") ,
+                    token    : str = anylog_repo_token                    ,
+                    content  : str = "default upload message"             ,
                     logger   : logging.Logger = Elogger
                    ):
     try:
@@ -161,7 +161,6 @@ def send_log_github(repo     : str = "CECNdata/anylog",
                 "content"       : content
             }
             repo     = f"https://api.github.com/repos/{repo}/contents/"
-            stime    = datetime.datetime.now().strftime("%Y%m%d%H%M%ST%H")
             filename = f"{filename}.{stime}.log"
             r        = requests.put(repo+filename, headers = headers, data = json.dumps(data))
 
@@ -184,9 +183,10 @@ def send_log_github(repo     : str = "CECNdata/anylog",
     @brief:  run <anylog> at the end of a program
     @return: success or failure
 """
-def bpa_send_any_log(repo       : str            = "CECNdata/anylog" ,
-                     token      : str            = anylog_repo_token ,
-                     time_sleep : int            = anylog_timesleep  ,
+def bpa_send_any_log(repo       : str            = "CECNdata/anylog"                    ,
+                     token      : str            = anylog_repo_token                    ,
+                     stime      : str            = cn_today.strftime("%Y%m%d%H%M%ST+8") ,
+                     time_sleep : int            = anylog_timesleep                     ,
                      logger     : logging.Logger = Elogger
                     ):
     os.chdir(sys.path[0]) # change current dir to script dir
@@ -195,11 +195,9 @@ def bpa_send_any_log(repo       : str            = "CECNdata/anylog" ,
             logger.error(f"need gihtub repo <{repo}> token (at least gist write)")
             return(False)
         else:
-            stime                  = datetime.datetime.now().strftime("%Y%m%d%H%M%ST%H")
             # https://stackoverflow.com/questions/69448044/convert-log-files-to-base64-and-upload-it-using-curl-to-github
             clean_escape           = """sed "s/{slash}x1b{slash}[[0-9;]*m//g" | sed -r "s/[{slash}x08{slash}x7c{slash}x2f{slash}x2d{slash}x5c{slash}x2d]{3,}//g" """ 
             base_command           = f"""cat {{log_path}} | {clean_escape} |  base64 --wrap=0   | jq --raw-input --compact-output "{{{{slash}}"message{{slash}}": {{slash}}"Log files{{slash}}", {{slash}}"content{{slash}}": . }}" | curl --request PUT --user ":{token}"  --header "Accept: application/vnd.github.v3+json" --header "Content-Type: application/json" --data-binary @- --url "https://api.github.com/repos/{repo}/contents/{{atp_name}}/{{filename}}" """
-            stime                  = datetime.datetime.now().strftime("%Y%m%d%H%M%ST%H")
             final_commands         = []
             if current_script_name == "pdp.py":
                 atp_name = os.path.basename(os.path.abspath(os.path.join(os.getcwd(), "../.."))).strip()
