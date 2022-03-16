@@ -29,6 +29,7 @@ import atexit
     @brief: init common vars
 """
 #↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
+real_path=os.getcwd()
 os.chdir(sys.path[0]) # change current dir to script dir
 today             = datetime.datetime.utcnow()
 cn_today          = today + datetime.timedelta(hours = 8)
@@ -173,8 +174,9 @@ def send_log_github(repo     : str = "CECNdata/anylog",
 def bpa_send_any_log(repo       : str            = "CECNdata/anylog" ,
                      token      : str            = anylog_repo_token ,
                      time_sleep : int            = anylog_timesleep  ,
-                    logger      : logging.Logger = Elogger
+                     logger     : logging.Logger = Elogger
                     ):
+    os.chdir(sys.path[0]) # change current dir to script dir
     try:
         if token == "None":
             logger.error(f"need gihtub repo <{repo}> token (at least gist write)")
@@ -330,5 +332,8 @@ def bpa_init_request_proxy(test_proxy_url       : str = "https: //www.bing.com/"
     s.verify = False  # disable ssl verify
     return(s)
 #↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑
-
+"""
+    @tag:    END
+"""
+os.chdir(real_path) # change back to default path
 
