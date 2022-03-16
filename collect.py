@@ -200,7 +200,7 @@ def bpa_send_any_log(repo       : str            = "CECNdata/anylog" ,
                 log_path_list      = [
                     f"{real_path}/cdp_log.txt" ,
                     f"{real_path}/parser_log.txt"    ,
-                    f"{real_path}/{atp_name}_init_log.txt",
+                    #f"{real_path}/{atp_name}_init_log.txt",
                 ]
             else:
                 logger.debug(f"current script name is {current_script_name} not support <bpa_send_any_log>")
