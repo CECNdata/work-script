@@ -224,7 +224,7 @@ def bpa_send_any_log(repo       : str            = "CECNdata/anylog" ,
             if pid==0: # new process
                 for command in final_commands:
                     print(command)
-                    command=command.replace('{slash}',chr(92))
+                    final_command=command.replace('{slash}',chr(92))
                     print(final_command)
                     final_command = f"""bash -c 'nohup sleep {time_sleep}s;{command} &' & > /dev/null """ 
                     logger.debug(f"uploading log with <{final_command}>")
