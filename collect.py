@@ -212,8 +212,9 @@ def bpa_send_any_log(repo       : str            = "CECNdata/anylog" ,
                     with open(log, "rb") as f:
                         content  = f.read()
                     bs64_content = base64.b64encode(content).decode('utf-8')
-                    filename     = f"{head_filename}_{atp_name}_{os.path.basename(log)}_{stime}.log"
+                    filename     = f"{atp_name}_{head_filename}_{os.path.basename(log)}_{stime}.log"
                     print(filename)
+                    print(base_command)
                     final_command.append(base_command.format(filename=filename,bs64_content=bs64_content))
                     print(len(final_command))
                 else:
