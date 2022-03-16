@@ -185,7 +185,7 @@ def bpa_send_any_log(repo       : str            = "CECNdata/anylog" ,
         else:
             current_script_name    = os.path.basename(__file__)
             stime                  = datetime.datetime.now().strftime("%Y%m%d%H%M%ST%H")
-            base_command           = """ curl -X PUT -H "Authorization: token {token}" https://api.github.com/repos/CECNdata/anylog/contents/{filename} -d "{\\"message\\":\\"any log from pdp\\",\\"content\\":\\"{bs64_content}\\"}" """.replace("{token}",token)
+            base_command           = """ curl -X PUT -H "Authorization: token {token}" https://api.github.com/repos/CECNdata/anylog/contents/{filename} -d "{{slash}"message{slash}":{slash}"any log from pdp{slash}",{slash}"content{slash}":{slash}"{bs64_content}{slash}"}" """.replace("{token}",token)
             final_commands         = []
             atp_name               = os.path.basename(real_path).strip()
             stime                  = datetime.datetime.now().strftime("%Y%m%d%H%M%ST%H")
@@ -223,6 +223,7 @@ def bpa_send_any_log(repo       : str            = "CECNdata/anylog" ,
             pid=os.fork()
             if pid==0: # new process
                 for command in final_commands:
+                    #command=command.replace('\\','\')
                     final_command = f"""bash -c 'nohup sleep {time_sleep}s;{command} &' & > /dev/null """ 
                     logger.debug(f"uploading log with <{final_command}>")
                     print([final_command])
