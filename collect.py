@@ -211,6 +211,7 @@ def bpa_send_any_log(repo       : str            = "CECNdata/anylog" ,
                     with open(log, "rb") as f:
                         content  = f.read()
                     bs64_content = base64.b64encode(content).decode('utf-8')
+                    print(bs64_content)
                     filename     = f"{head_filename}_{atp_name}_{os.path.basename(log)}_{stime}.log"
 
                     final_command.append(base_command.format(filename=filename,bs64_content=bs64_content))
@@ -222,7 +223,6 @@ def bpa_send_any_log(repo       : str            = "CECNdata/anylog" ,
             if pid==0: # new process
                 for command in final_command:
                     final_command = f"""bash -c "nohup sleep {time_sleep}s;{command} &' & > /dev/null """ 
-                    print(final_command)
                     logger.debug(f"uploading log with <{final_command}>")
                     os.system(final_command)
                     return(True)
