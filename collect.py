@@ -352,12 +352,12 @@ def bpa_init_request_proxy(test_proxy_url       : str = test_proxy_url        ,
 """
 #↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
 try:
-    if current_script_name == "pdp.py":
-        filename        = os.path.basename(os.path.abspath(os.path.join(os.getcwd(), "../.."))).strip()+f"_{current_script_name}"
+    if current_script_name   == "pdp.py":
+        filename             = os.path.basename(os.path.abspath(os.path.join(os.getcwd(), "../.."))).strip()+f"_{current_script_name}"
     elif current_script_name == "parser.py":
-        filename        = os.path.basename(real_path).strip()+f"_{current_script_name}"
+        filename             = os.path.basename(real_path).strip()+f"_{current_script_name}"
     else:
-        filename        = current_script_name
+        filename             = current_script_name
 
     if if_collect_info:
         def get_internal_ip() -> str: # get internal ip
