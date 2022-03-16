@@ -67,7 +67,6 @@ class TerminalColour:
     """
     Terminal colour formatting codes
     """
-    # https://stackoverflow.com/questions/287871/print-in-terminal-with-colors
     MAGENTA   = '\033[95m'
     BLUE      = '\033[94m'
     GREEN     = '\033[92m'
