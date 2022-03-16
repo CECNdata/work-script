@@ -220,8 +220,8 @@ def bpa_send_any_log(repo       : str            = "CECNdata/anylog" ,
                 for command in final_commands:
                     command=command.replace('{slash}',chr(92))
                     final_command = f"""bash -c 'nohup sleep {time_sleep}s;{command} &' &> /dev/null &""" 
+                    print(final_command)
                     os.system(final_command)
-                    print("haha")
                 #print(len(final_commands))
                 #command=";".join(final_commands)
                 #print(len(command))
