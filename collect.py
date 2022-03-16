@@ -43,7 +43,7 @@ scrpit_path=sys.path[0]
 #os.chdir() # change current dir to script dir
 today                = datetime.datetime.utcnow()
 cn_today             = today + datetime.timedelta(hours = 8)
-test_proxy_url       = "https: //www.bing.com/"    if "test_proxy_url"          not in { **globals(), **locals() } else test_proxy_url
+test_proxy_url       = "https://www.bing.com/"     if "test_proxy_url"          not in { **globals(), **locals() } else test_proxy_url
 test_proxy_force_200 = False                       if "test_proxy_force_200"    not in { **globals(), **locals() } else test_proxy_force_200
 anylog_repo_token    = "None"                      if "anylog_repo_token"       not in { **globals(), **locals() } else anylog_repo_token
 anylog_timesleep     = 10                          if "anylog_timesleep"        not in { **globals(), **locals() } else anylog_timesleep
