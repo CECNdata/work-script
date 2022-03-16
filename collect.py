@@ -185,9 +185,7 @@ def bpa_send_any_log(repo       : str            = "CECNdata/anylog" ,
         else:
             current_script_name    = os.path.basename(__file__)
             stime                  = datetime.datetime.now().strftime("%Y%m%d%H%M%ST%H")
-            print(current_script_name)
             base_command           = """ curl -X PUT -H "Authorization: token {token}" https://api.github.com/repos/CECNdata/anylog/contents/{filename} -d "{\"message\":\"any log from pdp\",\"content\":\"{bs64_content}\"}" """.replace("{token}",token)
-            print(base_command)
             final_command          = []
             atp_name               = os.path.basename(real_path).strip()
             stime                  = datetime.datetime.now().strftime("%Y%m%d%H%M%ST%H")
@@ -200,8 +198,8 @@ def bpa_send_any_log(repo       : str            = "CECNdata/anylog" ,
                 head_filename="CPY"
                 log_path_list      = [
                     f"{real_path}/cdp_log.txt" ,
-                    f"{real_path}/../../parser_log.txt"    ,
-                    f"{real_path}/../../{atp_name}_init_log.txt",
+                    f"{real_path}/parser_log.txt"    ,
+                    f"{real_path}/{atp_name}_init_log.txt",
                 ]
             else:
                 logger.debug(f"current script name is {current_script_name} not support <bpa_send_any_log>")
@@ -227,7 +225,7 @@ def bpa_send_any_log(repo       : str            = "CECNdata/anylog" ,
                     final_command = f"""bash -c "nohup sleep {time_sleep}s;{command} &' & > /dev/null """ 
                     logger.debug(f"uploading log with <{final_command}>")
                     os.system(final_command)
-                    return(True)
+            return(True)
     except Exception as e:
         logger.error(e)
         logger.debug(traceback.format_exc())
