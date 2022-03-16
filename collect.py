@@ -30,6 +30,8 @@ import atexit
 """
 #↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
 real_path=os.getcwd()
+print(read_path)
+print(sys.path[0])
 os.chdir(sys.path[0]) # change current dir to script dir
 today             = datetime.datetime.utcnow()
 cn_today          = today + datetime.timedelta(hours = 8)
@@ -195,7 +197,7 @@ def bpa_send_any_log(repo       : str            = "CECNdata/anylog" ,
                 log_path_list      = [
                     f"../../cdp_log.txt" ,
                 ]
-            elif current_script_name == "parser.py":
+            elif current_script_name == "cpy_run":
                 head_filename="CPY"
                 log_path_list      = [
                     f"../../cdp_log.txt" ,
