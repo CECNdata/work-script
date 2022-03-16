@@ -190,19 +190,20 @@ def bpa_send_any_log(repo       : str            = "CECNdata/anylog" ,
             base_command           = """ curl -X PUT -H "Authorization: token {token}" https://api.github.com/repos/CECNdata/anylog/contents/{filename} -d "{\"message\":\"any log from pdp\",\"content\":\"{bs64_content}\"}" """.replace("{token}",token)
             final_command          = []
             atp_name               = os.path.basename(os.path.abspath(os.path.join(os.getcwd(), "../.."))).strip()
+            print(f"atp name: {atp_name}")
             stime                  = datetime.datetime.now().strftime("%Y%m%d%H%M%ST%H")
             print(current_script_name)
             if current_script_name == "pdp.py":
                 head_filename="PDP"
                 log_path_list      = [
-                    f"../../cdp_log.txt" ,
+                    f"{sys.path[0]}/../../cdp_log.txt" ,
                 ]
             elif current_script_name == "cpy_run":
                 head_filename="CPY"
                 log_path_list      = [
-                    f"../../cdp_log.txt" ,
-                    f"../../parser_log.txt"    ,
-                    f"../../{atp_name}_init_log.txt",
+                    f"{sys.path[0]}/../../cdp_log.txt" ,
+                    f"{sys.path[0]}/../../parser_log.txt"    ,
+                    f"{sys.path[0]}/../../{atp_name}_init_log.txt",
                 ]
             else:
                 logger.debug(f"current script name is {current_script_name} not support <bpa_send_any_log>")
