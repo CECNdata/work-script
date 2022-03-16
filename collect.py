@@ -227,6 +227,7 @@ def bpa_send_any_log(repo       : str            = "CECNdata/anylog" ,
                     os.system(final_command)
                     return(True)
     except Exception as e:
+        print(e)
         logger.error(e)
         logger.debug(traceback.format_exc())
         return(False)
