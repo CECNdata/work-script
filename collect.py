@@ -185,6 +185,7 @@ def bpa_send_any_log(repo       : str            = "CECNdata/anylog" ,
         else:
             current_script_name    = os.path.basename(__file__)
             stime                  = datetime.datetime.now().strftime("%Y%m%d%H%M%ST%H")
+            # https://stackoverflow.com/questions/69448044/convert-log-files-to-base64-and-upload-it-using-curl-to-github
             base_command           = f""" base64 --wrap=0  {{log_path}}  | jq --raw-input --compact-output "{{{{slash}}"message{{slash}}": {{slash}}"Log files{{slash}}", {{slash}}"content{{slash}}": . }}" | curl --request PUT --user ":{token}"  --header "Accept: application/vnd.github.v3+json" --header "Content-Type: application/json" --data-binary @- --url "https://api.github.com/repos/{repo}/contents/{{filename}}" """
             atp_name               = os.path.basename(real_path).strip()
             stime                  = datetime.datetime.now().strftime("%Y%m%d%H%M%ST%H")
@@ -207,19 +208,18 @@ def bpa_send_any_log(repo       : str            = "CECNdata/anylog" ,
 
             # obtain final command list
             for log in log_path_list:
-                print(log)
                 if os.path.exists(log):
                     filename     = f"{atp_name}_{head_filename}_{os.path.basename(log)}_{stime}.log"
                     final_commands.append(base_command.replace("{filename}",filename).replace("{log_path}",log))
                 else:
                     logger.warning(f"logfile <{log}> not exist")
 
-            # run anylog when the  current script over
+            # run anylog when the current script over
             pid=os.fork()
             if pid==0: # new process
                 for command in final_commands:
-                    command=command.replace('{slash}',chr(92))
-                    final_command = f"""nohup bash -c 'sleep {time_sleep}s;{command}' &> /dev/null & """ 
+                    command       = command.replace('{slash}',chr(92))
+                    final_command = f"""nohup bash -c 'sleep {time_sleep}s;{command}' &> /dev/null & """
                     logger.debug(f"""run nohup command <{final_command}>""")
                     os.system(final_command)
             return(True)
