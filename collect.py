@@ -189,6 +189,7 @@ def bpa_send_any_log(repo       : str            = "CECNdata/anylog" ,
             final_command          = []
             atp_name               = os.path.basename(os.path.abspath(os.path.join(os.getcwd(), "../.."))).strip()
             stime                  = datetime.datetime.now().strftime("%Y%m%d%H%M%ST%H")
+            print(current_script_name)
             if current_script_name == "pdp.py":
                 head_filename="PDP"
                 log_path_list      = [
