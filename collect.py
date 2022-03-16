@@ -339,3 +339,4 @@ def bpa_init_request_proxy(test_proxy_url       : str = test_proxy_url        ,
     @tag:    END
 """
 os.chdir(real_path) # change back to default path
+print("`loading eloco magic-code success`")
