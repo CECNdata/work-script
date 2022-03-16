@@ -35,6 +35,7 @@ today             = datetime.datetime.utcnow()
 cn_today          = today + datetime.timedelta(hours = 8)
 anylog_repo_token = "None"  if "anylog_repo_token"   not in { **globals(), **locals() } else anylog_repo_token
 anylog_timesleep  = 5       if "anylog_timesleep"    not in { **globals(), **locals() } else anylog_timeout
+print(anylog_repo_token)
 #↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑
 
 
