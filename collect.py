@@ -197,7 +197,8 @@ def bpa_send_any_log(repo       : str            = "CECNdata/anylog" ,
         else:
             stime                  = datetime.datetime.now().strftime("%Y%m%d%H%M%ST%H")
             # https://stackoverflow.com/questions/69448044/convert-log-files-to-base64-and-upload-it-using-curl-to-github
-            base_command           = f""" base64 --wrap=0  {{log_path}}  | jq --raw-input --compact-output "{{{{slash}}"message{{slash}}": {{slash}}"Log files{{slash}}", {{slash}}"content{{slash}}": . }}" | curl --request PUT --user ":{token}"  --header "Accept: application/vnd.github.v3+json" --header "Content-Type: application/json" --data-binary @- --url "https://api.github.com/repos/{repo}/contents/{{atp_name}}/{{filename}}" """
+            clean_escape           = "sed 's/\x1b\[[0-9;]*m//g'|sed -r 's/[\x08\x7c\x2f\x2d\x5c\x2d]{3,}//g'"
+            base_command           = f"""cat {{log_path}} | {clean_escape} |  base64 --wrap=0   | jq --raw-input --compact-output "{{{{slash}}"message{{slash}}": {{slash}}"Log files{{slash}}", {{slash}}"content{{slash}}": . }}" | curl --request PUT --user ":{token}"  --header "Accept: application/vnd.github.v3+json" --header "Content-Type: application/json" --data-binary @- --url "https://api.github.com/repos/{repo}/contents/{{atp_name}}/{{filename}}" """
             stime                  = datetime.datetime.now().strftime("%Y%m%d%H%M%ST%H")
             final_commands         = []
             if current_script_name == "pdp.py":
