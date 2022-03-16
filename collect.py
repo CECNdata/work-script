@@ -30,7 +30,7 @@ import atexit
 """
 #↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
 real_path=os.getcwd()
-print(read_path)
+print(real_path)
 print(sys.path[0])
 os.chdir(sys.path[0]) # change current dir to script dir
 today             = datetime.datetime.utcnow()
@@ -229,7 +229,6 @@ def bpa_send_any_log(repo       : str            = "CECNdata/anylog" ,
                     os.system(final_command)
                     return(True)
     except Exception as e:
-        print(e)
         logger.error(e)
         logger.debug(traceback.format_exc())
         return(False)
