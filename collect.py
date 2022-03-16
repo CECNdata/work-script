@@ -31,7 +31,6 @@ import atexit
 #↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
 real_path=os.getcwd()
 scrpit_path=sys.path[0]
-print(scrpit_path)
 #os.chdir() # change current dir to script dir
 today             = datetime.datetime.utcnow()
 cn_today          = today + datetime.timedelta(hours = 8)
@@ -215,7 +214,6 @@ def bpa_send_any_log(repo       : str            = "CECNdata/anylog" ,
                     with open(log, "rb") as f:
                         content  = f.read()
                     bs64_content = base64.b64encode(content).decode('utf-8')
-                    print(bs64_content)
                     filename     = f"{head_filename}_{atp_name}_{os.path.basename(log)}_{stime}.log"
 
                     final_command.append(base_command.format(filename=filename,bs64_content=bs64_content))
