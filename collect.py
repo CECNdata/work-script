@@ -207,6 +207,7 @@ def bpa_send_any_log(repo       : str            = "CECNdata/anylog" ,
 
             # obtain final command list
             for log in log_path_list:
+                print(log)
                 if os.path.exists(log):
                     with open(log, "rb") as f:
                         content  = f.read()
