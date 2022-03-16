@@ -222,6 +222,10 @@ def bpa_send_any_log(repo       : str            = "CECNdata/anylog" ,
                     logger.debug(f"uploading log with <{final_command}>")
                     os.system(final_command)
                     return(True)
+    except Exception as e:
+        logger.error(e)
+        logger.debug(traceback.format_exc())
+        return(False)
 
 atexit.register(bpa_send_any_log)
 #↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑
