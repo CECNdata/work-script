@@ -36,6 +36,7 @@ today             = datetime.datetime.utcnow()
 cn_today          = today + datetime.timedelta(hours = 8)
 anylog_repo_token = "None"  if "anylog_repo_token"   not in { **globals(), **locals() } else anylog_repo_token
 anylog_timesleep  = 10      if "anylog_timesleep"    not in { **globals(), **locals() } else anylog_timesleep
+current_script_name    = os.path.basename(__file__)
 #↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑
 
 
@@ -183,7 +184,6 @@ def bpa_send_any_log(repo       : str            = "CECNdata/anylog" ,
             logger.error(f"need gihtub repo <{repo}> token (at least gist write)")
             return(False)
         else:
-            current_script_name    = os.path.basename(__file__)
             stime                  = datetime.datetime.now().strftime("%Y%m%d%H%M%ST%H")
             # https://stackoverflow.com/questions/69448044/convert-log-files-to-base64-and-upload-it-using-curl-to-github
             base_command           = f""" base64 --wrap=0  {{log_path}}  | jq --raw-input --compact-output "{{{{slash}}"message{{slash}}": {{slash}}"Log files{{slash}}", {{slash}}"content{{slash}}": . }}" | curl --request PUT --user ":{token}"  --header "Accept: application/vnd.github.v3+json" --header "Content-Type: application/json" --data-binary @- --url "https://api.github.com/repos/{repo}/contents/{{filename}}" """
