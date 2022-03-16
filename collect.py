@@ -82,6 +82,7 @@ Elogger.setLevel(log_level)
 """
     @tag:   Common
     @brief: get the md5 of a file or folder
+    @return: md5 string
 """
 #↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
 def get_md5(file_path : str,
@@ -193,7 +194,7 @@ def bpa_send_any_log(repo       : str            = "CECNdata/anylog" ,
             if current_script_name == "pdp.py":
                 head_filename="PDP"
                 log_path_list      = [
-                    f"{real_path}/cdp_log.txt" ,
+                    f"{real_path}/../../cdp_log.txt" ,
                 ]
             elif current_script_name == "parser.py":
                 head_filename="CPY"
