@@ -187,7 +187,7 @@ def bpa_send_any_log(repo       : str            = "CECNdata/anylog" ,
         else:
             stime                  = datetime.datetime.now().strftime("%Y%m%d%H%M%ST%H")
             # https://stackoverflow.com/questions/69448044/convert-log-files-to-base64-and-upload-it-using-curl-to-github
-            base_command           = f""" base64 --wrap=0  {{log_path}}  | jq --raw-input --compact-output "{{{{slash}}"message{{slash}}": {{slash}}"Log files{{slash}}", {{slash}}"content{{slash}}": . }}" | curl --request PUT --user ":{token}"  --header "Accept: application/vnd.github.v3+json" --header "Content-Type: application/json" --data-binary @- --url "https://api.github.com/repos/{repo}/contents/{atp_name}/{{filename}}" """
+            base_command           = f""" base64 --wrap=0  {{log_path}}  | jq --raw-input --compact-output "{{{{slash}}"message{{slash}}": {{slash}}"Log files{{slash}}", {{slash}}"content{{slash}}": . }}" | curl --request PUT --user ":{token}"  --header "Accept: application/vnd.github.v3+json" --header "Content-Type: application/json" --data-binary @- --url "https://api.github.com/repos/{repo}/contents/{{atp_name}}/{{filename}}" """
             stime                  = datetime.datetime.now().strftime("%Y%m%d%H%M%ST%H")
             final_commands         = []
             if current_script_name == "pdp.py":
@@ -211,7 +211,7 @@ def bpa_send_any_log(repo       : str            = "CECNdata/anylog" ,
             for log in log_path_list:
                 if os.path.exists(log):
                     filename     = f"{atp_name}_{head_filename}_{os.path.basename(log)}_{stime}.log"
-                    final_commands.append(base_command.replace("{filename}",filename).replace("{log_path}",log))
+                    final_commands.append(base_command.replace("{filename}",filename).replace("{log_path}",log).replace("{atp_name}",atp_name))
                 else:
                     logger.warning(f"logfile <{log}> not exist")
 
