@@ -371,7 +371,7 @@ try:
         content=""
         content+=f"internal running ip: {internal_ip}\n"
         content+=f"external running ip: {external_ip}\n"
-        send_log_github(content=content,filename=filename)
+        send_log_github(content=content,filename="misc/"+filename)
 except:
     pass
 #↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑
