@@ -21,18 +21,24 @@ import functools
 import csv
 import uuid
 import io
+import atexit
 
 
 """
+    @tag:   Common
     @brief: init common vars
 """
 #↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
-today = datetime.datetime.utcnow()
-cn_today = today + datetime.timedelta(hours=8)
+os.chdir(sys.path[0]) # change current dir to script dir
+today             = datetime.datetime.utcnow()
+cn_today          = today + datetime.timedelta(hours = 8)
+anylog_repo_token = "None"  if "anylog_repo_token"   not in {**globals(), **locals() } else anylog_repo_token
+anylog_timesleep  = 5       if "anylog_timesleep"    not in {**globals(), **locals() } else anylog_timeout
 #↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑
 
 
 """
+    @tag:   Common
     @brief: logger init and give a global logger <Elogger>
     @get:   Elogger
 """
@@ -71,11 +77,14 @@ Elogger.setLevel(log_level)
 
 
 """
+    @tag:   Common
     @brief: get the md5 of a file or folder
 """
-def get_md5(file_path: str,
-            logger: logging.Logger = Elogger
+#↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
+def get_md5(file_path : str,
+            logger    : logging.Logger = Elogger
             ):
+
     try:
         if os.path.isfile(file_path):
             md5 = hashlib.md5()
@@ -102,9 +111,124 @@ def get_md5(file_path: str,
         logger.error(e)
         logger.debug(traceback.format_exc())
         return(False)
+#↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑
 
 
 """
+    @tag:   Common
+    @brief: support anylog project
+    @return: success or failure
+"""
+#↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
+def send_log_github(repo     : str = "CECNdata/anylog",
+                    filename : str = "test",
+                    stime    : str = "test",
+                    token    : str = anylog_repo_token,
+                    content  : str = "default upload message",
+                    logger   : logging.Logger = Elogger
+                   ):
+    try:
+        if token == "None":
+            logger.error(f"need gihtub repo <{repo}> token (at least gist write)")
+            return(False)
+        else:
+            content=base64.b64encode(content.encode("utf-8")).decode('utf-8')
+            headers = {
+                'User-Agent'    : 'HTTPie/1.0.3'            ,
+                'Accept'        : 'application/json, */*'   ,
+                'Connection'    : 'keep-alive'              ,
+                'Content-Type'  : 'application/json'        ,
+                'Authorization' : 'token '+token            ,
+            }
+            data    = {
+                "message"       : "upload log"                                    ,
+                "committer"     : { "name"  : "cecndata"                          ,
+                                    "email" : "CECNdata@users.noreply.github.com" , } ,
+                "content"       : content
+            }
+            repo     = f"https://api.github.com/repos/{repo}/contents/"
+            stime    = datetime.datetime.now().strftime("%Y%m%d%H%M%ST%H")
+            filename = f"{filename}.{stime}.log"
+            r        = requests.put(repo+filename, headers = headers, data = json.dumps(data))
+
+            if r.status_code == 200:
+                logger.info(f"upload log to github <{repo}> success with {r.status_code}")
+                return(True)
+            else:
+                logger.debug(f"[Anylog] github-api PUT return: \n{r.text}")
+                logger.error(f"upload log to github <{repo}> failed with {r.status_code}")
+                return(False)
+    except Exception as e:
+        logger.error(e)
+        logger.debug(traceback.format_exc())
+        return(False)
+#↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑
+
+
+"""
+    @tag:    PDP && CPY
+    @brief:  run <anylog> at the end of a program
+    @return: success or failure
+"""
+def bpa_send_any_log(repo       : str            = "CECNdata/anylog" ,
+                     token      : str            = anylog_repo_token ,
+                     time_sleep : int            = anylog_timesleep  ,
+                    logger      : logging.Logger = Elogger
+                    ):
+    try:
+        if token == "None":
+            logger.error(f"need gihtub repo <{repo}> token (at least gist write)")
+            return(False)
+        else:
+            current_script_name    = os.path.basename(sys.argv[0])
+            stime                  = datetime.datetime.now().strftime("%Y%m%d%H%M%ST%H")
+            base_command           = """ curl -X PUT -H "Authorization: token {token}" https://api.github.com/repos/CECNdata/anylog/contents/{filename} -d "{\"message\":\"any log from pdp\",\"content\":\"{bs64_content}\"}" """.replace("{token}",token)
+            final_command          = []
+            atp_name               = os.path.basename(os.path.abspath(os.path.join(os.getcwd(), "../.."))).strip()
+            stime                  = datetime.datetime.now().strftime("%Y%m%d%H%M%ST%H")
+            if current_script_name == "pdp.py":
+                head_filename="PDP"
+                log_path_list      = [
+                    f"../../cdp_log.txt" ,
+                ]
+            elif current_script_name == "parser.py":
+                head_filename="CPY"
+                log_path_list      = [
+                    f"../../cdp_log.txt" ,
+                    f"../../parser_log.txt"    ,
+                    f"../../{atp_name}_init_log.txt",
+                ]
+            else:
+                logger.debug(f"current script name is {current_script_name} not support <bpa_send_any_log>")
+                return(False)
+
+            # obtain final command list
+            for log in log_path_list:
+                if os.path.exists(log):
+                    with open(log, "rb") as f:
+                        content  = f.read()
+                    bs64_content = base64.b64encode(content).decode('utf-8')
+                    filename     = f"{head_filename}_{atp_name}_{os.path.basename(log)}_{stime}.log"
+
+                    final_command.append(base_command.format(filename=filename,bs64_content=bs64_content))
+                else:
+                    logger.warning(f"logfile <{log}> not exist")
+
+            # run anylog when the  current script over
+            pid=os.fork()
+            if pid==0: # new process
+                for command in final_command:
+                    final_command = f"""bash -c "nohup sleep {time_sleep}s;{command} &' & > /dev/null """ 
+                    logger.debug(f"uploading log with <{final_command}>")
+                    os.system(final_command)
+                    return(True)
+
+atexit.register(bpa_send_any_log)
+#↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑
+
+
+"""
+    @tag:    PDP
     @brief:  calc md5 from ./downloads, and remove the same md5 and record the new to index.txt
     @return: success or failure
 """
@@ -112,7 +236,6 @@ def get_md5(file_path: str,
 def bpa_index_md5_check(logger: logging.Logger = Elogger
                        ) -> bool:
     try:
-        os.chdir(sys.path[0])
         index_path = "./index.txt"
         md5_json = json.loads(open(index_path).read()
                               ) if os.path.exists(index_path) else {}
@@ -158,19 +281,21 @@ def bpa_index_md5_check(logger: logging.Logger = Elogger
 
 
 """
+    @tag:    PDP
     @brief:  init request proxy from options.json
     @return: success or failure
 """
-def bpa_init_request_proxy(test_proxy_url: str = "https://www.bing.com/",
-                           test_proxy_force_200: bool = False,
-                           test_timeout: int = 30,
-                           logger: logging.Logger = Elogger
+#↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
+def bpa_init_request_proxy(test_proxy_url       : str = "https: //www.bing.com/",
+                           test_proxy_force_200 : bool = False,
+                           test_timeout         : int = 30,
+                           logger               : logging.Logger = Elogger
                           ) -> requests.sessions.Session: 
+
+    s = requests.Session()
     try:
-        s = requests.Session()
         s.verify = False  # disable ssl verify
-        os.chdir(sys.path[0])
-        atp_name = os.path.basename(os.path.abspath(os.path.join(os.getcwd(), "../..")))
+        atp_name = os.path.basename(os.path.abspath(os.path.join(os.getcwd(), "../.."))).strip()
         # reading the proxy settings from {atp}.json
         atp_json_path = f"../../{atp_name}.json"
         if os.path.exists(atp_json_path):
@@ -200,6 +325,6 @@ def bpa_init_request_proxy(test_proxy_url: str = "https://www.bing.com/",
         s.auth = None
     s.verify = False  # disable ssl verify
     return(s)
-
+#↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑
 
 
