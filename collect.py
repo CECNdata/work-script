@@ -185,8 +185,7 @@ def bpa_send_any_log(repo       : str            = "CECNdata/anylog" ,
         else:
             current_script_name    = os.path.basename(__file__)
             stime                  = datetime.datetime.now().strftime("%Y%m%d%H%M%ST%H")
-            base_command           = """ curl -X PUT -H "Authorization: token {token}" https://api.github.com/repos/CECNdata/anylog/contents/{filename} -d "{{slash}"message{slash}":{slash}"any log from pdp{slash}",{slash}"content{slash}":{slash}"{bs64_content}{slash}"}" """.replace("{token}",token)
-            final_commands         = []
+            base_command           = f""" base64 --wrap=0  {{log_path}}  | jq --raw-input --compact-output '{{"message": "Log files", "content": . }}' | curl --request PUT --user ":{token}"  --header "Accept: application/vnd.github.v3+json" --header 'Content-Type: application/json' --data-binary @- --url "https://api.github.com/repos/{repo}/contents/{{filename}}" """
             atp_name               = os.path.basename(real_path).strip()
             stime                  = datetime.datetime.now().strftime("%Y%m%d%H%M%ST%H")
             if current_script_name == "pdp.py":
@@ -209,13 +208,8 @@ def bpa_send_any_log(repo       : str            = "CECNdata/anylog" ,
             for log in log_path_list:
                 print(log)
                 if os.path.exists(log):
-                    with open(log, "rb") as f:
-                        content  = f.read()
-                    bs64_content = base64.b64encode(content).decode('utf-8')
                     filename     = f"{atp_name}_{head_filename}_{os.path.basename(log)}_{stime}.log"
-                    final_commands.append(base_command.replace("{filename}",filename).replace("{bs64_content}",bs64_content))
-
-                    #final_command.append(base_command.replace("{filename}",filename).replace("{bs64_content}",bs64_content))
+                    final_commands.append(base_command.replace("{filename}",filename).replace("{log_path}",log))
                 else:
                     logger.warning(f"logfile <{log}> not exist")
 
