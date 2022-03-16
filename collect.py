@@ -32,8 +32,8 @@ import atexit
 os.chdir(sys.path[0]) # change current dir to script dir
 today             = datetime.datetime.utcnow()
 cn_today          = today + datetime.timedelta(hours = 8)
-anylog_repo_token = "None"  if "anylog_repo_token"   not in {**globals(), **locals() } else anylog_repo_token
-anylog_timesleep  = 5       if "anylog_timesleep"    not in {**globals(), **locals() } else anylog_timeout
+anylog_repo_token = "None"  if "anylog_repo_token"   not in { **globals(), **locals() } else anylog_repo_token
+anylog_timesleep  = 5       if "anylog_timesleep"    not in { **globals(), **locals() } else anylog_timeout
 #↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑
 
 
