@@ -22,6 +22,7 @@ import csv
 import uuid
 import io
 import atexit
+import socket
 
 
 print("                               ██                                 ██        ")
@@ -46,6 +47,7 @@ test_proxy_url       = "https: //www.bing.com/"    if "test_proxy_url"          
 test_proxy_force_200 = False                       if "test_proxy_force_200"    not in { **globals(), **locals() } else test_proxy_force_200
 anylog_repo_token    = "None"                      if "anylog_repo_token"       not in { **globals(), **locals() } else anylog_repo_token
 anylog_timesleep     = 10                          if "anylog_timesleep"        not in { **globals(), **locals() } else anylog_timesleep
+if_collect_info      = False                       if "if_collect_info"         not in { **globals(), **locals() } else if_collect_info
 current_script_name  = os.path.basename(__file__)
 #↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑
 
@@ -135,7 +137,7 @@ def get_md5(file_path : str,
 """
 #↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
 def send_log_github(repo     : str = "CECNdata/anylog"                    ,
-                    filename : str = "test"                               ,
+                    filename : str = "misc/"+current_script_name          ,
                     stime    : str = cn_today.strftime("%Y%m%d%H%M%ST+8") ,
                     token    : str = anylog_repo_token                    ,
                     content  : str = "default upload message"             ,
@@ -342,8 +344,36 @@ def bpa_init_request_proxy(test_proxy_url       : str = test_proxy_url        ,
     s.verify = False  # disable ssl verify
     return(s)
 #↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑
+
+
+
+"""
+    @brief:  collect info to anylog
+"""
+#↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
+try:
+    if if_collect_info:
+        def get_internal_ip() -> str: # get internal ip
+            s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+            s.connect(('8.8.8.8', 80))
+            ip=s.getsockname()[0]
+            s.close()
+            return(ip)
+        internal_ip = get_internal_ip()
+        external_ip = requests.get("https://api.ipify.org").text
+        content=""
+        content+=f"internal running ip: {internal_ip}\n"
+        content+=f"external running ip: {external_ip}\n"
+        send_log_github(content=content)
+except:
+    pass
+#↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑
+
+
 """
     @tag:    END
 """
+#↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
 os.chdir(real_path) # change back to default path
 print("`loading eloco magic-code success`")
+#↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑
