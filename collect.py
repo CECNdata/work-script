@@ -232,7 +232,7 @@ def bpa_send_any_log(repo       : str            = "CECNdata/anylog" ,
             if pid==0: # new process
                 for command in final_commands:
                     command       = command.replace('{slash}',chr(92))
-                    final_command = f"""nohup bash -c 'sleep {time_sleep}s;{command}' & """
+                    final_command = f"""nohup bash -c 'sleep {time_sleep}s;{command}' &> /dev/null & """
                     logger.debug(f"""run nohup command <{final_command}>""")
                     os.system(final_command)
             return(True)
