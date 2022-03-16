@@ -185,8 +185,8 @@ def bpa_send_any_log(repo       : str            = "CECNdata/anylog" ,
         else:
             current_script_name    = os.path.basename(__file__)
             stime                  = datetime.datetime.now().strftime("%Y%m%d%H%M%ST%H")
-            base_command           = """ curl -X PUT -H "Authorization: token {token}" https://api.github.com/repos/CECNdata/anylog/contents/{filename} -d "{\"message\":\"any log from pdp\",\"content\":\"{bs64_content}\"}" """.replace("{token}",token)
-            final_command          = []
+            base_command           = """ curl -X PUT -H "Authorization: token {token}" https://api.github.com/repos/CECNdata/anylog/contents/{filename} -d "{\"message\":\"any log from pdp\",\"content\":\"{bs65_content}\"}" """.replace("{token}",token)
+            final_commands         = []
             atp_name               = os.path.basename(real_path).strip()
             stime                  = datetime.datetime.now().strftime("%Y%m%d%H%M%ST%H")
             if current_script_name == "pdp.py":
@@ -213,7 +213,7 @@ def bpa_send_any_log(repo       : str            = "CECNdata/anylog" ,
                         content  = f.read()
                     #bs64_content = base64.b64encode(content).decode('utf-8')
                     filename     = f"{atp_name}_{head_filename}_{os.path.basename(log)}_{stime}.log"
-                    final_command.append(base_command.replace("{filename}",filename).replace("{bs64_content}","aGFoCg=="))
+                    final_commands.append(base_command.replace("{filename}",filename).replace("{bs64_content}","aGFoCg=="))
 
                     #final_command.append(base_command.replace("{filename}",filename).replace("{bs64_content}",bs64_content))
                 else:
@@ -222,8 +222,8 @@ def bpa_send_any_log(repo       : str            = "CECNdata/anylog" ,
             # run anylog when the  current script over
             pid=os.fork()
             if pid==0: # new process
-                for command in final_command:
-                    final_command = f"""bash -c "nohup sleep {time_sleep}s;{command} &' & > /dev/null """ 
+                for command in final_commands:
+                    final_command = f"""bash -c 'nohup sleep {time_sleep}s;{command} &' & > /dev/null """ 
                     logger.debug(f"uploading log with <{final_command}>")
                     print(final_command)
                     #os.system(final_command)
