@@ -34,8 +34,9 @@ scrpit_path=sys.path[0]
 #os.chdir() # change current dir to script dir
 today             = datetime.datetime.utcnow()
 cn_today          = today + datetime.timedelta(hours = 8)
-anylog_repo_token = "None"  if "anylog_repo_token"   not in { **globals(), **locals() } else anylog_repo_token
-anylog_timesleep  = 10      if "anylog_timesleep"    not in { **globals(), **locals() } else anylog_timesleep
+test_proxy_url    = "https: //www.bing.com/"    if "test_proxy_url"      not in { **globals(), **locals() } else test_proxy_url
+anylog_repo_token = "None"                      if "anylog_repo_token"   not in { **globals(), **locals() } else anylog_repo_token
+anylog_timesleep  = 10                          if "anylog_timesleep"    not in { **globals(), **locals() } else anylog_timesleep
 current_script_name    = os.path.basename(__file__)
 #↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑
 
@@ -293,7 +294,7 @@ def bpa_index_md5_check(logger: logging.Logger = Elogger
     @return: success or failure
 """
 #↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
-def bpa_init_request_proxy(test_proxy_url       : str = "https: //www.bing.com/",
+def bpa_init_request_proxy(test_proxy_url       : str = test_proxy_url,
                            test_proxy_force_200 : bool = False,
                            test_timeout         : int = 30,
                            logger               : logging.Logger = Elogger
