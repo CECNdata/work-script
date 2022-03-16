@@ -337,4 +337,3 @@ def bpa_init_request_proxy(test_proxy_url       : str = "https: //www.bing.com/"
     @tag:    END
 """
 os.chdir(real_path) # change back to default path
-
