@@ -23,6 +23,8 @@ import uuid
 import io
 import atexit
 import socket
+import sqlite3
+import itertools
 
 
 """
@@ -190,6 +192,7 @@ def send_log_github(repo     : str = "CECNdata/anylog"                    ,
     @return: success or failure
 """
 #↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
+@atexit.register
 def bpa_send_any_log(repo       : str            = "CECNdata/anylog"                    ,
                      token      : str            = anylog_repo_token                    ,
                      stime      : str            = cn_today.strftime("%Y%m%d%H%M%ST+8") ,
@@ -245,8 +248,6 @@ def bpa_send_any_log(repo       : str            = "CECNdata/anylog"            
         logger.error(e)
         logger.debug(traceback.format_exc())
         return(False)
-
-atexit.register(bpa_send_any_log)
 #↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑
 
 
