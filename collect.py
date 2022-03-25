@@ -138,6 +138,31 @@ def get_md5(file_path : str,
 
 """
     @tag:   Common
+    @brief: make bit look good
+    @return: bit string
+"""
+#↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
+def bsize(bsize: int) -> str:
+    if bsize < 1024:  #比特
+        bsize    = str(round(bsize, 2)) + ' B' #字节
+    elif bsize >= 1024 and bsize < 1024 * 1024:
+        bsize   = str(round(bsize / 1024, 2)) + ' KB' #千字节
+    elif bsize >= 1024 * 1024 and bsize < 1024 * 1024 * 1024:
+        bsize   = str(round(bsize / 1024 / 1024, 2)) + ' MB' #兆字节
+    elif bsize >= 1024 * 1024 * 1024 and bsize < 1024 * 1024 * 1024 * 1024:
+        bsize   = str(round(bsize / 1024 / 1024 / 1024, 2)) + ' GB' #千兆字节
+    elif bsize >= 1024 * 1024 * 1024 * 1024 and bsize < 1024 * 1024 * 1024 * 1024 * 1024:
+        bsize   = str(round(bsize / 1024 / 1024 / 1024 / 1024, 2)) + ' TB' #太字节
+    elif bsize >= 1024 * 1024 * 1024 * 1024 * 1024 and bsize < 1024 * 1024 * 1024 * 1024 * 1024 * 1024:
+        bsize   = str(round(bsize / 1024 / 1024 / 1024 / 1024 / 1024, 2)) + ' PB' #拍字节
+    elif bsize >= 1024 * 1024 * 1024 * 1024 * 1024 * 1024 and bsize < 1024 * 1024 * 1024 * 1024 * 1024 * 1024 * 1024:
+        bsize   = str(round(bsize / 1024 / 1024 / 1024 / 1024 / 1024 /1024, 2)) + ' EB' #艾字节
+    return(bsize)
+#↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑
+
+
+"""
+    @tag:   Common
     @brief: support anylog project
     @return: success or failure
 """
