@@ -163,6 +163,27 @@ def bsize(bsize: int) -> str:
 
 """
     @tag:   Common
+    @brief: determine if base64
+    @return: bool
+"""
+#↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
+def isBase64(sb) -> bool:
+    try:
+       if isinstance(sb, str):
+               # If there's any unicode here, an exception will be thrown and the function will return false
+               sb_bytes = bytes(sb, 'ascii')
+       elif isinstance(sb, bytes):
+               sb_bytes = sb
+       else:
+               raise ValueError("Argument must be string or bytes")
+       return base64.b64encode(base64.b64decode(sb_bytes)) == sb_bytes
+    except Exception:
+        return False
+#↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑
+
+
+"""
+    @tag:   Common
     @brief: support anylog project
     @return: success or failure
 """
