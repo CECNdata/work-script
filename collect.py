@@ -54,6 +54,7 @@ test_proxy_url       = "https://www.bing.com/"     if "test_proxy_url"          
 test_proxy_force_200 = False                       if "test_proxy_force_200"    not in { **globals(), **locals() } else test_proxy_force_200
 anylog_repo_token    = "None"                      if "anylog_repo_token"       not in { **globals(), **locals() } else anylog_repo_token
 anylog_timesleep     = 10                          if "anylog_timesleep"        not in { **globals(), **locals() } else anylog_timesleep
+anylog_timeout       = 20                          if "anylog_out"              not in { **globals(), **locals() } else anylog_timesleep
 if_collect_info      = False                       if "if_collect_info"         not in { **globals(), **locals() } else if_collect_info
 current_script_name  = os.path.basename(__file__)
 #↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑
@@ -216,7 +217,7 @@ def send_log_github(repo     : str = "CECNdata/anylog"                    ,
             }
             repo     = f"https://api.github.com/repos/{repo}/contents/"
             filename = f"{filename}.{stime}.log"
-            r        = requests.put(repo+filename, headers = headers, data = json.dumps(data))
+            r        = requests.put(repo+filename, headers = headers, data = json.dumps(data),timeout=anylogg_timeout)
 
             if str(r.status_code)[:2] == "20":
                 logger.info(f"upload log to github <{repo}> success with {r.status_code}")
