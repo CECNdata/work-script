@@ -217,7 +217,7 @@ def send_log_github(repo     : str = "CECNdata/anylog"                    ,
             }
             repo     = f"https://api.github.com/repos/{repo}/contents/"
             filename = f"{filename}.{stime}.log"
-            r        = requests.put(repo+filename, headers = headers, data = json.dumps(data),timeout=anylogg_timeout)
+            r        = requests.put(repo+filename, headers = headers, data = json.dumps(data),timeout=anylog_timeout)
 
             if str(r.status_code)[:2] == "20":
                 logger.info(f"upload log to github <{repo}> success with {r.status_code}")
