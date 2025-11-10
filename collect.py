@@ -443,6 +443,7 @@ def _auto_patch_connector_init():
         old_init(self, *args, **kwargs)
         orig = getattr(self, "query_results", None)
         if orig and callable(orig):
+            print("patching collector")
             sig = inspect.signature(orig)
             if "params_dict" in sig.parameters:
                 def wrapper(sql, **wkwargs):
