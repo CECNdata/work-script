@@ -431,6 +431,32 @@ except:
 
 
 """
+    @brief:  patch Connector
+"""
+#↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
+import inspect
+
+def _auto_patch_connector_init():
+    old_init = Connector.__init__
+
+    def new_init(self, *args, **kwargs):
+        old_init(self, *args, **kwargs)
+        orig = getattr(self, "query_results", None)
+        if orig and callable(orig):
+            sig = inspect.signature(orig)
+            if "params_dict" in sig.parameters:
+                def wrapper(sql, **wkwargs):
+                    return orig(sql, params_dict=wkwargs)
+                self.query_results = wrapper
+
+    Connector.__init__ = new_init
+
+# 在项目启动时调用一次
+_auto_patch_connector_init()
+#↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑
+
+
+"""
     @tag:    END
 """
 #↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
